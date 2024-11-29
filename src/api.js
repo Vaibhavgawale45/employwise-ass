@@ -1,8 +1,7 @@
-import { message } from "antd";
-import { LOCAL_API_BASE_URL, METHOD_TYPES } from "./constants/app-constants";
+import { BASE_URL } from "./constants/app-constants";
 
 const makeApiCall = async (methodType, endPoint, body) => {
-  const url = `${LOCAL_API_BASE_URL}${endPoint}`;
+  const url = `${BASE_URL}${endPoint}`;
 
   try {
     const loginDetails = JSON.parse(localStorage.getItem("loginDetails"));
@@ -36,16 +35,15 @@ const makeApiCall = async (methodType, endPoint, body) => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      const errorMessage = errorData.message || response.statusText;
-      message.error(errorMessage);
-      throw new Error(`Error: ${response.status} - ${errorMessage}`);
+      const errorMessage = errorData.message || "Failed to login.";
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
     console.error("API Error:", error.message);
-    throw error;
+    throw new Error(error.message || "An error occurred while logging in.");
   }
 };
 
