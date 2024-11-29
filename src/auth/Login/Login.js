@@ -1,10 +1,10 @@
-import "./Login.css"; // Import the CSS file instead of SCSS
 import { useState } from "react";
-import makeApiCall from "../../api";
-import { METHOD_TYPES } from "../../constants/app-constants";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { API_ENDPOINTS } from "../../constants/api-endpoints";
 import { Button, Input, message } from "antd";
+import { API_ENDPOINTS } from "../../constants/api-endpoints";
+import { BASE_URL } from "../../constants/app-constants"
+import "./Login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -12,28 +12,21 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-
-    // Log email and password to the console
-    console.log("Email:", email);
-    console.log("Password:", password);
-
+    e.preventDefault();
     try {
-      const response = await makeApiCall(METHOD_TYPES.POST, API_ENDPOINTS.LOGIN_API, {
+      const response = await axios.post(`${BASE_URL}${API_ENDPOINTS.LOGIN_API}`, {
         email,
         password,
       });
 
-      // Assuming response contains a token on success
-      if (response.token) {
+      if (response.data.token) {
         message.success("Welcome back!");
-        localStorage.setItem("authToken", response.token); // Save token to localStorage
-        navigate("/Home"); // Navigate to the home page
+        localStorage.setItem("Token", response.data.token); 
+        navigate("/userlist");
       } else {
         message.error("Failed to login.");
       }
     } catch (err) {
-      // Handle the error in the component (e.g., display a simple error message)
       console.error("Login Error:", err.message);
       message.error("Failed to login.");
     }
@@ -46,14 +39,14 @@ const Login = () => {
           <div
             className="logo"
             onClick={() => {
-              const loginDetails = JSON.parse(localStorage.getItem("loginDetails"));
+              const loginDetails = JSON.parse(
+                localStorage.getItem("loginDetails")
+              );
               if (loginDetails) {
                 navigate("/Home");
               }
             }}
-          >
-            {/* <img src={logo} alt="Shopper Logo" /> */}
-          </div>
+          ></div>
           <div className="auth__header_title">Welcome back</div>
         </div>
         <form className="auth__form" onSubmit={handleSubmit}>
@@ -82,7 +75,11 @@ const Login = () => {
             />
           </div>
           <div className="auth__action_primary">
-            <Button className="btn__primary w-full" type="primary" htmlType="submit">
+            <Button
+              className="btn__primary w-full"
+              type="primary"
+              htmlType="submit"
+            >
               Login
             </Button>
           </div>

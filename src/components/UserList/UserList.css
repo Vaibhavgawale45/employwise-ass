@@ -1,6 +1,6 @@
 .user-list {
   padding: 20px;
-  max-width: 1000px;
+  max-width: 1300px;
   margin: auto;
 }
 
@@ -14,7 +14,7 @@
 .user-table td {
   border: 1px solid #ddd;
   padding: 8px;
-  text-align: left;
+  text-align: center;
 }
 
 .user-table th {
@@ -27,4 +27,51 @@
 
 .user-table img {
   border-radius: 50%;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .user-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .user-table th,
+  .user-table td {
+    padding: 12px 8px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-list {
+    padding: 10px;
+  }
+
+  .user-table th,
+  .user-table td {
+    font-size: 12px;
+    padding: 10px 5px;
+  }
+
+  .user-table img {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.pagination-container {
+  margin-top: 6px;
+}
+
+.delete-button {
+  margin-left: 8px;
+  background-color: red;
+  color: white;
+  border: none;
+}
+
+.delete-button:hover {
+  background-color: darkred;
 }
